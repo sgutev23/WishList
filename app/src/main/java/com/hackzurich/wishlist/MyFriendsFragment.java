@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -84,9 +83,9 @@ public class MyFriendsFragment extends Fragment {
                 @Override
                 protected List<String> doInBackground(Void... voids) {
                     List<String> converted = new LinkedList<String>();
-                    /*for (Integer f: service.getFriendList(userId)) {
+                    for (String f: service.getFriendList(userId)) {
                         converted.add(f.toString());
-                    } */
+                    }
                     return converted;
                 }
             }.execute().get();

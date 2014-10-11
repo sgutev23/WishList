@@ -20,7 +20,7 @@ public interface WishlistBackend {
     void createWish(@Body WishAndId wish, Callback<String> cb);
 
     @GET("/getFriends/{id}")
-    List<Integer> getFriendList(@Path("id") String userId );
+    List<String> getFriendList(@Path("id") String userId );
 
     @GET("/getFriendWishlist/{id}")
     List<Wish> getWishList(@Path("id") String userId);
