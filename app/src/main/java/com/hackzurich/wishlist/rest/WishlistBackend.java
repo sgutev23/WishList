@@ -26,8 +26,12 @@ public interface WishlistBackend {
     @GET("/getFriendWishlist/{id}")
     List<Wish> getWishList(@Path("id") String userId);
 
-    @POST("/buyFriendWish/{id}/{item}")
-    void changeWishState(@Path("id") String userId, @Path("item") int wishId);
+    @POST("/buyFriendWish/{myId}/{friendId}/{item}")
+    void changeWishState(
+            @Path("myId")     String myId,
+            @Path("friendId") String friendId,
+            @Path("item")     String wishId,
+            Callback<String> cb);
 
     @POST("/register")
     void register(@Body Registration registration, Callback<String> cb);
