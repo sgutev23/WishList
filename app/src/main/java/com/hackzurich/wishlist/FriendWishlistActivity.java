@@ -1,5 +1,7 @@
 package com.hackzurich.wishlist;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
@@ -114,21 +116,31 @@ public class FriendWishlistActivity extends CustomActivity {
             } else {
                 line2.setText("");
             }
+            final String wishId = wishes.get(i).getId();
             root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    line1.setPaintFlags(line1.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    service.changeWishState(myId, userId, wishes.get(i).getId(), new Callback<String>() {
-                        @Override
-                        public void success(String s, Response response) {
-                            line2.setText(String.format("- %s", nameMap.getString(myId)));
-                        }
+                    new AlertDialog.Builder(FriendWishlistActivity.this)
+                            .setTitle("Confirmation")
+                            .setMessage("Are you sure you want to buy this item?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    line1.setPaintFlags(line1.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                    service.changeWishState(myId, userId, wishId, new Callback<String>() {
+                                        @Override
+                                        public void success(String s, Response response) {
+                                            line2.setText(String.format("- %s", nameMap.getString(myId)));
+                                        }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Toast.makeText(FriendWishlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                                        @Override
+                                        public void failure(RetrofitError error) {
+                                            Toast.makeText(FriendWishlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }).setNegativeButton("No", null)
+                            .show();
                 }
             });
             return root;
