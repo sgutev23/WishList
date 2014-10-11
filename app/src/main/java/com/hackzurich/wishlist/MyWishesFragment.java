@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.hackzurich.wishlist.model.Card.Card;
 import com.hackzurich.wishlist.model.Wish;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -57,7 +59,8 @@ public class MyWishesFragment extends Fragment {
         final WishlistBackend service = restAdapter.create(WishlistBackend.class);
 
         final View rootView = inflater.inflate(R.layout.fragment_wishes, container, false);
-        final ListView list = (ListView) rootView.findViewById(R.id.list);
+        final ListView list = (ListView) rootView.findViewById(R.id.card_listView);
+
         refreshAdapter(list, service);
 
         final Button button = (Button) rootView.findViewById(R.id.button);
@@ -84,19 +87,19 @@ public class MyWishesFragment extends Fragment {
 
     private void refreshAdapter(ListView list, final WishlistBackend service) {
         try {
-            List<String> wishes = (new AsyncTask<Void, Void, List<String>>() {
+            List<Card> wishes = (new AsyncTask<Void, Void, List<Card>>() {
 
                 @Override
-                protected List<String> doInBackground(Void... voids) {
-                    List<String> result = new LinkedList<String>();
+                protected List<Card> doInBackground(Void... voids) {
+                    List<Card> result = new ArrayList<Card>();
                     for (Wish w: service.getWishList(0)) {
-                        result.add(w.getContent());
+                        result.add(new Card(w.getContent(), "test"));
                     }
                     return result;
                 }
             }).execute().get();
 
-            ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row, wishes);
+            ArrayAdapter<Card> listAdapter = new CardArrayAdapter(getActivity(), R.layout.list_item_card, wishes);
             list.setAdapter(listAdapter);
             listAdapter.notifyDataSetChanged();
         } catch (InterruptedException e) {

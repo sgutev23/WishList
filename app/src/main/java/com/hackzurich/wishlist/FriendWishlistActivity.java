@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 import retrofit.RestAdapter;
 
 
-public class FriendWishlistActivity extends Activity {
+public class FriendWishlistActivity extends CustomActivity {
     public static String USERID = "USER_ID";
     private Integer userId = null;
 

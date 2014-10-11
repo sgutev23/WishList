@@ -5,29 +5,40 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
+import com.hackzurich.wishlist.model.Card.Card;
 import com.hackzurich.wishlist.model.Registration;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit.Callback;
@@ -35,7 +46,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
 
-public class MainActivity extends Activity implements ActionBar.TabListener {
+public class MainActivity extends CustomActivity implements ActionBar.TabListener {
     public static int FACEBOOK_AUTH = 1;
     private Session.StatusCallback statusCallback =
             new SessionStatusCallback();
@@ -100,6 +111,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
 
         Session session = Session.getActiveSession();
         if (session == null) {
@@ -227,6 +239,60 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     return getString(R.string.title_section2).toUpperCase(l);
             }
             return null;
+        }
+    }
+
+    public static class CardArrayAdapter  extends ArrayAdapter<Card> {
+        private static final String TAG = "CardArrayAdapter";
+        private List<Card> cardList = new ArrayList<Card>();
+
+        static class CardViewHolder {
+            TextView line1;
+            TextView line2;
+        }
+
+        public CardArrayAdapter(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+        }
+
+        @Override
+        public void add(Card object) {
+            cardList.add(object);
+            super.add(object);
+        }
+
+        @Override
+        public int getCount() {
+            return this.cardList.size();
+        }
+
+        @Override
+        public Card getItem(int index) {
+            return this.cardList.get(index);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = convertView;
+            CardViewHolder viewHolder;
+            if (row == null) {
+                LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                row = inflater.inflate(R.layout.list_item_card, parent, false);
+                viewHolder = new CardViewHolder();
+                viewHolder.line1 = (TextView) row.findViewById(R.id.line1);
+                viewHolder.line2 = (TextView) row.findViewById(R.id.line2);
+                row.setTag(viewHolder);
+            } else {
+                viewHolder = (CardViewHolder)row.getTag();
+            }
+            Card card = getItem(position);
+            viewHolder.line1.setText(card.getLine1());
+            viewHolder.line2.setText(card.getLine2());
+            return row;
+        }
+
+        public Bitmap decodeToBitmap(byte[] decodedByte) {
+            return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
         }
     }
 }
