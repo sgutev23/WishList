@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -16,12 +17,27 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Locale;
 
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
+    public static int FACEBOOK_AUTH = 1;
+    private Session.StatusCallback statusCallback =
+            new SessionStatusCallback();
+    private class SessionStatusCallback implements Session.StatusCallback {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            if (state == SessionState.OPENED || state == SessionState.OPENED_TOKEN_UPDATED) {
+                Log.d("fb", session.getAccessToken());
+            }
+        }
+    }
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -50,6 +66,38 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        Session session = Session.getActiveSession();
+        if (session == null) {
+            Intent login = new Intent(this, LoginActivity.class);
+            startActivityForResult(login, FACEBOOK_AUTH);
+        } else {
+            doLogin();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        doLogin();
+    }
+
+    void doLogin() {
+        Session session = Session.getActiveSession();
+        if (!session.isOpened() && !session.isClosed()) {
+            session.openForRead(new Session.OpenRequest(this)
+                    .setPermissions(Arrays.asList("public_profile", "user_friends"))
+                    .setCallback(statusCallback));
+        } else {
+            Session.openActiveSession(this, true, statusCallback);
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Session session = Session.getActiveSession();
+        if (session != null && session.isOpened()) session.close();
     }
 
     void getHashForFB () {
