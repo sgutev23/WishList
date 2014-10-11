@@ -104,7 +104,7 @@ public class MyFriendsFragment extends Fragment{
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             View root = this.inflater.inflate(R.layout.row, viewGroup, false);
             TextView tv = (TextView) root.findViewById(R.id.rowTextView);
             tv.setText(ids.get(i));
@@ -112,6 +112,7 @@ public class MyFriendsFragment extends Fragment{
                 @Override
                 public void onClick(View view) {
                     Intent toActivity = new Intent(MyFriendsFragment.this.getActivity(), FriendWishlistActivity.class);
+                    toActivity.putExtra(FriendWishlistActivity.USERID, ids.get(i));
                     startActivity(toActivity);
                 }
             });
