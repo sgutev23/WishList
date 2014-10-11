@@ -32,15 +32,17 @@ public class MyWishesFragment extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_USER_ID = "user_id";
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static MyWishesFragment newInstance(int sectionNumber) {
+    public static MyWishesFragment newInstance(int sectionNumber, String userId) {
         MyWishesFragment fragment = new MyWishesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putString(ARG_USER_ID, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,13 +54,13 @@ public class MyWishesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://cotizo.net:3000/")
+                .setEndpoint(getString(R.string.endpoint))
                 .build();
         final WishlistBackend service = restAdapter.create(WishlistBackend.class);
 
         final View rootView = inflater.inflate(R.layout.fragment_wishes, container, false);
         final ListView list = (ListView) rootView.findViewById(R.id.list);
-        refreshAdapter(list, service);
+        refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
 
         final Button button = (Button) rootView.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +70,7 @@ public class MyWishesFragment extends Fragment {
                 service.createWish(new Wish(wishText), new Callback<Void>() {
                     @Override
                     public void success(Void aVoid, Response response) {
-
+                        refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
                     }
 
                     @Override
@@ -76,20 +78,19 @@ public class MyWishesFragment extends Fragment {
 
                     }
                 });
-                refreshAdapter(list, service);
             }
         });
         return rootView;
     }
 
-    private void refreshAdapter(ListView list, final WishlistBackend service) {
+    private void refreshAdapter(ListView list, final WishlistBackend service, final String userId) {
         try {
             List<String> wishes = (new AsyncTask<Void, Void, List<String>>() {
 
                 @Override
                 protected List<String> doInBackground(Void... voids) {
                     List<String> result = new LinkedList<String>();
-                    for (Wish w: service.getWishList(0)) {
+                    for (Wish w: service.getWishList(userId)) {
                         result.add(w.getContent());
                     }
                     return result;

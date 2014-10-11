@@ -28,15 +28,17 @@ public class MyFriendsFragment extends Fragment{
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_USER_ID = "user_id";
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static MyFriendsFragment newInstance(int sectionNumber) {
+    public static MyFriendsFragment newInstance(int sectionNumber, String userId) {
         MyFriendsFragment fragment = new MyFriendsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putString(ARG_USER_ID, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,13 +50,14 @@ public class MyFriendsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://cotizo.net:3000/")
+                .setEndpoint(getString(R.string.endpoint))
                 .build();
+
         final WishlistBackend service = restAdapter.create(WishlistBackend.class);
         final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
         final ListView list = (ListView) rootView.findViewById(R.id.list);
         try {
-            list.setAdapter(new FriendListAdapter(inflater, service));
+            list.setAdapter(new FriendListAdapter(inflater, service, getArguments().getString(ARG_USER_ID)));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -73,14 +76,14 @@ public class MyFriendsFragment extends Fragment{
             this.inflater = inflater;
         }
 
-        public FriendListAdapter(final LayoutInflater inflater, final WishlistBackend service) throws ExecutionException, InterruptedException {
+        public FriendListAdapter(final LayoutInflater inflater, final WishlistBackend service, final String userId) throws ExecutionException, InterruptedException {
             this.inflater = inflater;
             this.ids = new AsyncTask<Void, Void, List<String>>() {
 
                 @Override
                 protected List<String> doInBackground(Void... voids) {
                     List<String> converted = new LinkedList<String>();
-                    for (Integer f: service.getFriendList()) {
+                    for (Integer f: service.getFriendList(userId)) {
                         converted.add(f.toString());
                     }
                     return converted;

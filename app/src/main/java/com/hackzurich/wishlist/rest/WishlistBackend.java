@@ -15,17 +15,17 @@ import retrofit.http.Path;
  * Created by cotizo on 10/11/2014.
  */
 public interface WishlistBackend {
-    @POST("/wish")
+    @POST("/addWish")
     void createWish(@Body Wish wish, Callback<Void> cb);
 
-    @GET("/friends")
-    List<Integer> getFriendList();
+    @GET("/getFriends/{id}")
+    List<Integer> getFriendList(@Path("id") String userId );
 
-    @GET("/friends/{id}/list")
-    List<Wish> getWishList(@Path("id") int userId);
+    @GET("/getFriendWishlist/{id}")
+    List<Wish> getWishList(@Path("id") String userId);
 
-    @POST("/friends/{id}/list/{item}/{state}")
-    void changeWishState(@Path("id") int userId, @Path("item") int wishId, @Path("state") boolean state);
+    @POST("/buyFriendWish/{id}/{item}")
+    void changeWishState(@Path("id") String userId, @Path("item") int wishId);
 
     @POST("/register")
     void register(@Body Registration registration, Callback<Void> cb);

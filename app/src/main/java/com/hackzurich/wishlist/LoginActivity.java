@@ -25,6 +25,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+        setResult(resultCode, data);
         finish();
     }
 
