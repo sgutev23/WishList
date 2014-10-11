@@ -37,7 +37,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
 
-public class MainActivity2 extends CustomActivity {
+public class MainActivity extends CustomActivity {
     public static int FACEBOOK_AUTH = 1;
     public String userId;
 
@@ -75,15 +75,16 @@ public class MainActivity2 extends CustomActivity {
                     service.register(new Registration(userId, token), new Callback<Void>() {
                         @Override
                         public void success(Void aVoid, retrofit.client.Response response) {
-                            Intent myIntent = new Intent(MainActivity2.this, TabbedActivity.class);
-                            MainActivity2.this.startActivity(myIntent);
+                            Intent myIntent = new Intent(MainActivity.this, TabbedActivity.class);
+                            MainActivity.this.startActivity(myIntent);
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Intent myIntent = new Intent(MainActivity2.this, TabbedActivity.class);
-                            MainActivity2.this.startActivity(myIntent);
-                            // TODO; // die
+                            // TODO; // die instead
+                            Intent myIntent = new Intent(MainActivity.this, TabbedActivity.class);
+                            MainActivity.this.startActivity(myIntent);
+
                         }
                     });
                 }
