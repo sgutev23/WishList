@@ -1,9 +1,15 @@
 package com.hackzurich.wishlist;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.hackzurich.wishlist.rest.WishlistBackend;
+
+import retrofit.RestAdapter;
 
 
 public class LoginScreen extends Activity {
@@ -12,6 +18,27 @@ public class LoginScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
+        final TextView tv = (TextView) findViewById(R.id.tv);
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://cotizo.net:3000/")
+                .build();
+        final WishlistBackend service = restAdapter.create(WishlistBackend.class);
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                for (final Integer x: service.getFriendList()) {
+                    LoginScreen.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv.setText(tv.getText() + " " + x.toString());
+                        }
+                    });
+                }
+                return null;
+
+            }
+        }.execute();
     }
 
 
