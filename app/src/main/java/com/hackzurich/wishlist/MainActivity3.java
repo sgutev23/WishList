@@ -1,44 +1,32 @@
 package com.hackzurich.wishlist;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
-import com.hackzurich.wishlist.model.Card.Card;
 import com.hackzurich.wishlist.model.Registration;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import retrofit.Callback;
@@ -75,9 +63,9 @@ public class MainActivity3 extends CustomActivity implements ActionBar.TabListen
                             .setEndpoint(getString(R.string.endpoint))
                             .build();
                     final WishlistBackend service = restAdapter.create(WishlistBackend.class);
-                    service.register(new Registration(userId, token), new Callback<Void>() {
+                    service.register(new Registration(userId, token), new Callback<String>() {
                         @Override
-                        public void success(Void aVoid, retrofit.client.Response response) {
+                        public void success(String aVoid, retrofit.client.Response response) {
                             resumeSetup();
                         }
 

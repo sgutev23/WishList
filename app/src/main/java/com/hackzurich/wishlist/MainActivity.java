@@ -1,20 +1,15 @@
 package com.hackzurich.wishlist;
 
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -30,7 +25,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -63,28 +57,30 @@ public class MainActivity extends CustomActivity {
     private void getUserId(final Session session) {
         Request req = Request.newMeRequest(session, new Request.GraphUserCallback() {
             @Override
-            public void onCompleted(GraphUser user, Response response) {
+            public void onCompleted(final GraphUser user, Response response) {
                 if (user != null) {
-                    String userId = user.getId();
+                    final String userId = user.getId();
                     String token = session.getAccessToken();
 
                     final RestAdapter restAdapter = new RestAdapter.Builder()
                             .setEndpoint(getString(R.string.endpoint))
                             .build();
                     final WishlistBackend service = restAdapter.create(WishlistBackend.class);
-                    service.register(new Registration(userId, token), new Callback<Void>() {
+                    service.register(new Registration(userId, token), new Callback<String>() {
                         @Override
-                        public void success(Void aVoid, retrofit.client.Response response) {
+                        public void success(String aVoid, retrofit.client.Response response) {
                             Intent myIntent = new Intent(MainActivity.this, TabbedActivity.class);
+                            myIntent.putExtra(TabbedActivity.ARG_USER_ID, userId);
                             MainActivity.this.startActivity(myIntent);
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
+                            Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_LONG);
                             // TODO; // die instead
-                            Intent myIntent = new Intent(MainActivity.this, TabbedActivity.class);
-                            MainActivity.this.startActivity(myIntent);
-
+                            // rip
+                            // Intent myIntent = new Intent(MainActivity.this, TabbedActivity.class);
+                            // MainActivity.this.startActivity(myIntent);
                         }
                     });
                 }

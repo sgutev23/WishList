@@ -15,9 +15,12 @@ import android.support.v4.view.ViewPager;
 public class TabbedActivity extends FragmentActivity implements
         ActionBar.TabListener {
 
+    public static final String ARG_USER_ID = "user_id";
+
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
+    private String userId;
     // Tab titles
     private String[] tabs = { "My Wishlist", "My Friends"};
 
@@ -25,6 +28,8 @@ public class TabbedActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userId = getIntent().getStringExtra(ARG_USER_ID);
 
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -68,10 +73,10 @@ public class TabbedActivity extends FragmentActivity implements
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return MyWishesFragment.newInstance(1, "TEST");
+                    return MyWishesFragment.newInstance(1, userId);
                 case 1:
                 default:
-                    return MyFriendsFragment.newInstance(1, "TEST");
+                    return MyFriendsFragment.newInstance(1, userId);
             }
         }
 

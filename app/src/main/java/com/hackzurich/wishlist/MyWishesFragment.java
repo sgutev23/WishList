@@ -1,5 +1,4 @@
 package com.hackzurich.wishlist;
-;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,10 +12,10 @@ import android.widget.ListView;
 
 import com.hackzurich.wishlist.model.Card.Card;
 import com.hackzurich.wishlist.model.Wish;
+import com.hackzurich.wishlist.model.WishAndId;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -24,6 +23,8 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+;
 
 /**
  * Created by cotizo on 10/11/2014.
@@ -64,16 +65,16 @@ public class MyWishesFragment extends Fragment {
         final ListView list = (ListView) rootView.findViewById(R.id.card_listView);
 
        // refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
-
+        final String userId = getArguments().getString(ARG_USER_ID);
         final Button button = (Button) rootView.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String wishText = ((EditText) rootView.findViewById(R.id.text)).getText().toString();
-                service.createWish(new Wish(wishText), new Callback<Void>() {
+                service.createWish(new WishAndId(new Wish(wishText), userId), new Callback<String>() {
                     @Override
-                    public void success(Void aVoid, Response response) {
-                        refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
+                    public void success(String aVoid, Response response) {
+                        refreshAdapter(list, service, userId);
                     }
 
                     @Override

@@ -2,6 +2,7 @@ package com.hackzurich.wishlist.rest;
 
 import com.hackzurich.wishlist.model.Registration;
 import com.hackzurich.wishlist.model.Wish;
+import com.hackzurich.wishlist.model.WishAndId;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import retrofit.http.Path;
  */
 public interface WishlistBackend {
     @POST("/addWish")
-    void createWish(@Body Wish wish, Callback<Void> cb);
+    void createWish(@Body WishAndId wish, Callback<String> cb);
 
     @GET("/getFriends/{id}")
     List<Integer> getFriendList(@Path("id") String userId );
@@ -28,5 +29,5 @@ public interface WishlistBackend {
     void changeWishState(@Path("id") String userId, @Path("item") int wishId);
 
     @POST("/register")
-    void register(@Body Registration registration, Callback<Void> cb);
+    void register(@Body Registration registration, Callback<String> cb);
 }
