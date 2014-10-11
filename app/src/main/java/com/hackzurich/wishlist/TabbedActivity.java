@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.widget.TextView;
 
 /**
  * Created by heat on 10/11/14.
@@ -40,10 +42,11 @@ public class TabbedActivity extends FragmentActivity implements
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+
         // Adding Tabs
         for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this));
+            ActionBar.Tab tab = actionBar.newTab();
+            actionBar.addTab(tab.setText(tab_name).setTabListener(this));
         }
     }
 
@@ -76,14 +79,14 @@ public class TabbedActivity extends FragmentActivity implements
                     return MyWishesFragment.newInstance(1, userId);
                 case 1:
                 default:
-                    return MyFriendsFragment.newInstance(1, userId);
+                    return MyFriendsFragment.newInstance(2, userId);
             }
         }
 
         @Override
         public int getCount() {
             // get item count - equal to number of tabs
-            return 3;
+            return 2;
         }
     }
     }

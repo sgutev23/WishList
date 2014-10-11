@@ -27,7 +27,7 @@
         android:text="Welcome to Wishlist!"
         android:layout_above="@id/authButton"
         android:textSize="37sp"
-        android:textColor="@color/myblue"
+        android:textColor="@color/mybrown"
         android:maxLines="1"
         android:ellipsize="end"
         android:fontFamily="sans-serif"

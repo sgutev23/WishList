@@ -1,11 +1,13 @@
 package com.hackzurich.wishlist;
 ;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,10 +70,16 @@ public class MyWishesFragment extends Fragment {
         refreshAdapter(list, service, userId);
 
         final Button button = (Button) rootView.findViewById(R.id.button);
+        final InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String wishText = ((EditText) rootView.findViewById(R.id.text)).getText().toString();
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+
+                final EditText text = (EditText) rootView.findViewById(R.id.text);
+                final String wishText = text.getText().toString();
                 service.createWish(new WishAndId(new Wish(wishText), userId), new Callback<String>() {
                     @Override
                     public void success(String aVoid, Response response) {
@@ -83,6 +91,7 @@ public class MyWishesFragment extends Fragment {
 
                     }
                 });
+                text.setText("");
             }
         });
         return rootView;
