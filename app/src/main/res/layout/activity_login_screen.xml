@@ -36,4 +36,12 @@
         android:shadowDy="1"
         android:shadowRadius="2"/>
 
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/splash"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

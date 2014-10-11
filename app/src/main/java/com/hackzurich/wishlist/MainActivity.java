@@ -9,6 +9,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.Request;
@@ -37,14 +39,16 @@ public class MainActivity extends CustomActivity {
 
     private UiLifecycleHelper uiHelper;
     private LoginButton loginBtn;
+    private ProgressBar spinner;
 
-    private static final List<String> PERMISSIONS = Arrays.asList("public_profile", "user_friends");
+    private static final List<String> PERMISSIONS = Arrays.asList("public_profile", "user_friends", "user_birthday");
 
     private Session.StatusCallback statusCallback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state,
                          Exception exception) {
             if (state.isOpened()) {
+                load(spinner);
                 getUserId(session);
                 Log.d("FacebookSampleActivity", "Facebook session opened");
             } else if (state.isClosed()) {
@@ -95,7 +99,8 @@ public class MainActivity extends CustomActivity {
         uiHelper = new UiLifecycleHelper(this, statusCallback);
         uiHelper.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-
+        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
         LoginButton uiButton = (LoginButton) findViewById(R.id.authButton);
         uiButton.setPublishPermissions(PERMISSIONS);
     }
@@ -149,5 +154,9 @@ public class MainActivity extends CustomActivity {
         if (s != null)
             s.requestNewPublishPermissions(new Session.NewPermissionsRequest(
                     this, PERMISSIONS));
+    }
+
+    public void load(View view){
+        spinner.setVisibility(View.VISIBLE);
     }
 }
