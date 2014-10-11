@@ -17,13 +17,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+import com.hackzurich.wishlist.model.Registration;
+import com.hackzurich.wishlist.rest.WishlistBackend;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Locale;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -32,9 +41,34 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             new SessionStatusCallback();
     private class SessionStatusCallback implements Session.StatusCallback {
         @Override
-        public void call(Session session, SessionState state, Exception exception) {
+        public void call(final Session session, SessionState state, Exception exception) {
             if (state == SessionState.OPENED || state == SessionState.OPENED_TOKEN_UPDATED) {
-                Log.d("fb", session.getAccessToken());
+                Request req = Request.newMeRequest(session, new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (user != null) {
+                            String userId = user.getId();
+                            String token = session.getAccessToken();
+
+                            final RestAdapter restAdapter = new RestAdapter.Builder()
+                                    .setEndpoint("http://cotizo.net:3000/")
+                                    .build();
+                            final WishlistBackend service = restAdapter.create(WishlistBackend.class);
+                            service.register(new Registration(userId, token), new Callback<Void>() {
+                                @Override
+                                public void success(Void aVoid, retrofit.client.Response response) {
+
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+                req.executeAsync();
             }
         }
     }

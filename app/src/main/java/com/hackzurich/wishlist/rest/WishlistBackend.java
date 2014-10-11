@@ -1,5 +1,6 @@
 package com.hackzurich.wishlist.rest;
 
+import com.hackzurich.wishlist.model.Registration;
 import com.hackzurich.wishlist.model.Wish;
 
 import java.util.List;
@@ -25,4 +26,7 @@ public interface WishlistBackend {
 
     @POST("/friends/{id}/list/{item}/{state}")
     void changeWishState(@Path("id") int userId, @Path("item") int wishId, @Path("state") boolean state);
+
+    @POST("/register")
+    void register(@Body Registration registration, Callback<Void> cb);
 }
