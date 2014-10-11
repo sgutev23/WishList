@@ -14,6 +14,10 @@ public class Wish {
         this.state = state;
     }
 
+    public Wish(String content) {
+        this(-1, content, false);
+    }
+
     public Boolean getState() {
         return state;
     }

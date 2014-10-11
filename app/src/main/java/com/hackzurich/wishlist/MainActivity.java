@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.hackzurich.wishlist.model.Wish;
@@ -25,7 +27,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -159,17 +164,43 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            final RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setEndpoint("http://cotizo.net:3000/")
+                    .build();
+            final WishlistBackend service = restAdapter.create(WishlistBackend.class);
+
+            final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             final ListView list = (ListView) rootView.findViewById(R.id.list);
+            refreshAdapter(list, service);
+
+            final Button button = (Button) rootView.findViewById(R.id.button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final String wishText = ((EditText) rootView.findViewById(R.id.text)).getText().toString();
+                    service.createWish(new Wish(wishText), new Callback<Void>() {
+                        @Override
+                        public void success(Void aVoid, Response response) {
+
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+                    refreshAdapter(list, service);
+                }
+            });
+            return rootView;
+        }
+
+        private void refreshAdapter(ListView list, final WishlistBackend service) {
             try {
                 List<String> wishes = (new AsyncTask<Void, Void, List<String>>() {
 
                     @Override
                     protected List<String> doInBackground(Void... voids) {
-                        RestAdapter restAdapter = new RestAdapter.Builder()
-                                .setEndpoint("http://cotizo.net:3000/")
-                                .build();
-                        final WishlistBackend service = restAdapter.create(WishlistBackend.class);
                         List<String> result = new LinkedList<String>();
                         for (Wish w: service.getWishList(0)) {
                             result.add(w.getContent());
@@ -180,12 +211,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
                 ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row, wishes);
                 list.setAdapter(listAdapter);
+                listAdapter.notifyDataSetChanged();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            return rootView;
         }
 
 
