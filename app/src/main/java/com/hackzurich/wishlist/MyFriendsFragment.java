@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hackzurich.wishlist.model.UserNameId;
+import com.hackzurich.wishlist.model.UserNameIdPic;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
 import java.util.List;
@@ -71,20 +71,20 @@ public class MyFriendsFragment extends Fragment {
 
     class FriendListAdapter extends BaseAdapter {
 
-        private final List<UserNameId> users;
+        private final List<UserNameIdPic> users;
         private final LayoutInflater inflater;
 
-        public FriendListAdapter(final LayoutInflater inflater,List<UserNameId> ids) {
+        public FriendListAdapter(final LayoutInflater inflater,List<UserNameIdPic> ids) {
             this.users = ids;
             this.inflater = inflater;
         }
 
         public FriendListAdapter(final LayoutInflater inflater, final WishlistBackend service, final String userId) throws ExecutionException, InterruptedException {
             this.inflater = inflater;
-            this.users = new AsyncTask<Void, Void, List<UserNameId>>() {
+            this.users = new AsyncTask<Void, Void, List<UserNameIdPic>>() {
 
                 @Override
-                protected List<UserNameId> doInBackground(Void... voids) {
+                protected List<UserNameIdPic> doInBackground(Void... voids) {
                     return service.getFriendList(userId);
                 }
             }.execute().get();
@@ -126,7 +126,7 @@ public class MyFriendsFragment extends Fragment {
 
         Bundle getNameMap() {
             Bundle result = new Bundle();
-            for (UserNameId uni: this.users) {
+            for (UserNameIdPic uni: this.users) {
                 result.putString(uni.getId(), uni.getName());
             }
             result.putString(userId, "me");
