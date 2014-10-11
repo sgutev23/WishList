@@ -14,11 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.hackzurich.wishlist.model.Wish;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
@@ -157,23 +160,26 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView debug = (TextView) rootView.findViewById(R.id.debug);
+            final ListView list = (ListView) rootView.findViewById(R.id.list);
             try {
-                debug.setText((new AsyncTask<Void, Void, String>() {
+                List<String> wishes = (new AsyncTask<Void, Void, List<String>>() {
 
                     @Override
-                    protected String doInBackground(Void... voids) {
+                    protected List<String> doInBackground(Void... voids) {
                         RestAdapter restAdapter = new RestAdapter.Builder()
                                 .setEndpoint("http://cotizo.net:3000/")
                                 .build();
                         final WishlistBackend service = restAdapter.create(WishlistBackend.class);
-                        String result = "";
-                        for (Wish w: service.getWishList(1)) {
-                            result += w.toString() + "\n";
+                        List<String> result = new LinkedList<String>();
+                        for (Wish w: service.getWishList(0)) {
+                            result.add(w.getContent());
                         }
                         return result;
                     }
-                }).execute().get());
+                }).execute().get();
+
+                ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row, wishes);
+                list.setAdapter(listAdapter);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -181,6 +187,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             }
             return rootView;
         }
+
+
     }
 
 }
