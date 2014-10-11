@@ -1,4 +1,5 @@
 package com.hackzurich.wishlist;
+;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,8 +24,6 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
-;
 
 /**
  * Created by cotizo on 10/11/2014.
@@ -66,6 +65,8 @@ public class MyWishesFragment extends Fragment {
 
        // refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
         final String userId = getArguments().getString(ARG_USER_ID);
+        refreshAdapter(list, service, userId);
+
         final Button button = (Button) rootView.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

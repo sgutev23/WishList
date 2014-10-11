@@ -96,24 +96,8 @@ public class MainActivity extends CustomActivity {
         uiHelper.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        PackageInfo info = null;
-        try {
-            info = getPackageManager().getPackageInfo("com.hackzurich.wishlist",  PackageManager.GET_SIGNATURES);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        for (Signature signature : info.signatures)
-        {
-            MessageDigest md = null;
-            try {
-                md = MessageDigest.getInstance("SHA");
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            md.update(signature.toByteArray());
-            Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-        }
+        LoginButton uiButton = (LoginButton) findViewById(R.id.authButton);
+        uiButton.setPublishPermissions(PERMISSIONS);
     }
 
     @Override
@@ -127,7 +111,6 @@ public class MainActivity extends CustomActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
