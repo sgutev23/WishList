@@ -6,20 +6,20 @@ package com.hackzurich.wishlist.model;
 public class Wish {
     private final Integer id;
     private final String content;
-    private final Boolean state;
+    private final String bought;
 
-    public Wish(Integer id, String content, Boolean state) {
+    public Wish(Integer id, String content, String bought) {
         this.id = id;
         this.content = content;
-        this.state = state;
+        this.bought = bought;
     }
 
     public Wish(String content) {
-        this(-1, content, false);
+        this(-1, content, null);
     }
 
-    public Boolean getState() {
-        return state;
+    public String getBought() {
+        return bought;
     }
 
     public String getContent() {
@@ -32,6 +32,6 @@ public class Wish {
 
     @Override
     public String toString() {
-        return String.format("Wish(id: %s, content: '%s', state: %s)", this.id, this.content, this.state);
+        return String.format("Wish(id: %s, content: '%s', bought: %s)", this.id, this.content, this.bought);
     }
 }
