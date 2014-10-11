@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackzurich.wishlist.model.Wish;
 import com.hackzurich.wishlist.rest.WishlistBackend;
@@ -28,10 +29,12 @@ import retrofit.client.Response;
 public class FriendWishlistActivity extends CustomActivity {
     public final static String MY_ID = "my_user_id";
     public final static String USER_ID = "user_id";
-    public final static String  USER_NAME = "user_name";
+    public final static String USER_NAME = "user_name";
+    public final static String NAME_MAP = "name_map";
     private String userId = null;
     private String userName = null;
     WishlistBackend service;
+    Bundle nameMap;
     private String myId;
 
     @Override
@@ -41,6 +44,7 @@ public class FriendWishlistActivity extends CustomActivity {
         userId = intent.getStringExtra(USER_ID);
         userName = intent.getStringExtra(USER_NAME);
         myId = intent.getStringExtra(MY_ID);
+        nameMap = intent.getBundleExtra(NAME_MAP);
 
         setContentView(R.layout.activity_friend_wishlist);
         ListView list = (ListView) findViewById(R.id.list);
@@ -101,10 +105,14 @@ public class FriendWishlistActivity extends CustomActivity {
         public View getView(final int i, View view, ViewGroup viewGroup) {
             View root = inflater.inflate(R.layout.list_item_card, viewGroup, false);
             final TextView line1 = (TextView) root.findViewById(R.id.line1);
+            final TextView line2 = (TextView) root.findViewById(R.id.line2);
             line1.setText(wishes.get(i).getContent());
             String bought = wishes.get(i).getBought();
             if (! (bought == null || bought.isEmpty())) {
                 line1.setPaintFlags(line1.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                line2.setText(String.format(" - %s", nameMap.getString(bought)));
+            } else {
+                line2.setText("");
             }
             root.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,12 +121,12 @@ public class FriendWishlistActivity extends CustomActivity {
                     service.changeWishState(myId, userId, wishes.get(i).getId(), new Callback<String>() {
                         @Override
                         public void success(String s, Response response) {
-                            // TODO
+                            line2.setText(String.format("- %s", nameMap.getString(myId)));
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-                            // TODO
+                            Toast.makeText(FriendWishlistActivity.this, "Error", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

@@ -117,10 +117,20 @@ public class MyFriendsFragment extends Fragment {
                     toActivity.putExtra(FriendWishlistActivity.USER_ID, users.get(i).getId());
                     toActivity.putExtra(FriendWishlistActivity.USER_NAME, users.get(i).getName());
                     toActivity.putExtra(FriendWishlistActivity.MY_ID, userId);
+                    toActivity.putExtra(FriendWishlistActivity.NAME_MAP, getNameMap());
                     startActivity(toActivity);
                 }
             });
             return root;
+        }
+
+        Bundle getNameMap() {
+            Bundle result = new Bundle();
+            for (UserNameId uni: this.users) {
+                result.putString(uni.getId(), uni.getName());
+            }
+            result.putString(userId, "me");
+            return result;
         }
     }
 }
