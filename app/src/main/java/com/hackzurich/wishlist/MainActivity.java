@@ -37,6 +37,7 @@ import retrofit.RetrofitError;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
     public static int FACEBOOK_AUTH = 1;
+
     private Session.StatusCallback statusCallback =
             new SessionStatusCallback();
     private class SessionStatusCallback implements Session.StatusCallback {
@@ -101,8 +102,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        Session session = Session.getActiveSession();
-        if (session == null) {
+        if (Session.getActiveSession() == null) {
             Intent login = new Intent(this, LoginActivity.class);
             startActivityForResult(login, FACEBOOK_AUTH);
         } else {
@@ -117,12 +117,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     void doLogin() {
         Session session = Session.getActiveSession();
-        if (!session.isOpened() && !session.isClosed()) {
+        if (session.isClosed()) {
             session.openForRead(new Session.OpenRequest(this)
                     .setPermissions(Arrays.asList("public_profile", "user_friends"))
                     .setCallback(statusCallback));
         } else {
-            Session.openActiveSession(this, true, statusCallback);
+            Session.openActiveSession(this, false, statusCallback);
         }
     }
 
@@ -131,7 +131,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     protected void onDestroy() {
         super.onDestroy();
         Session session = Session.getActiveSession();
-        if (session != null && session.isOpened()) session.close();
+        if (session != null && session.isOpened()) {
+            session.closeAndClearTokenInformation();
+        }
     }
 
     void getHashForFB () {
