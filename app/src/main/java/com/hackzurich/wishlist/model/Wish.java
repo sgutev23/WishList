@@ -25,4 +25,9 @@ public class Wish {
     public Integer getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Wish(id: %s, content: '%s', state: %s)", this.id, this.content, this.state);
+    }
 }

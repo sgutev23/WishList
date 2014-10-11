@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -13,8 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.hackzurich.wishlist.model.Wish;
+import com.hackzurich.wishlist.rest.WishlistBackend;
 
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+
+import retrofit.RestAdapter;
 
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -104,7 +112,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
@@ -115,8 +123,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
         }
@@ -151,6 +157,28 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            TextView debug = (TextView) rootView.findViewById(R.id.debug);
+            try {
+                debug.setText((new AsyncTask<Void, Void, String>() {
+
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        RestAdapter restAdapter = new RestAdapter.Builder()
+                                .setEndpoint("http://cotizo.net:3000/")
+                                .build();
+                        final WishlistBackend service = restAdapter.create(WishlistBackend.class);
+                        String result = "";
+                        for (Wish w: service.getWishList(1)) {
+                            result += w.toString() + "\n";
+                        }
+                        return result;
+                    }
+                }).execute().get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             return rootView;
         }
     }
