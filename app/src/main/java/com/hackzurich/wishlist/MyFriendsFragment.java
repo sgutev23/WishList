@@ -30,6 +30,8 @@ public class MyFriendsFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_USER_ID = "user_id";
 
+    private String userId = null;
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -49,6 +51,7 @@ public class MyFriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        userId = getArguments().getString(ARG_USER_ID);
         final RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(getString(R.string.endpoint))
                 .build();
@@ -57,7 +60,7 @@ public class MyFriendsFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
         final ListView list = (ListView) rootView.findViewById(R.id.list);
         try {
-            list.setAdapter(new FriendListAdapter(inflater, service, getArguments().getString(ARG_USER_ID)));
+            list.setAdapter(new FriendListAdapter(inflater, service, userId));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -113,10 +116,21 @@ public class MyFriendsFragment extends Fragment {
                     Intent toActivity = new Intent(MyFriendsFragment.this.getActivity(), FriendWishlistActivity.class);
                     toActivity.putExtra(FriendWishlistActivity.USER_ID, users.get(i).getId());
                     toActivity.putExtra(FriendWishlistActivity.USER_NAME, users.get(i).getName());
+                    toActivity.putExtra(FriendWishlistActivity.MY_ID, userId);
+                    toActivity.putExtra(FriendWishlistActivity.NAME_MAP, getNameMap());
                     startActivity(toActivity);
                 }
             });
             return root;
+        }
+
+        Bundle getNameMap() {
+            Bundle result = new Bundle();
+            for (UserNameId uni: this.users) {
+                result.putString(uni.getId(), uni.getName());
+            }
+            result.putString(userId, "me");
+            return result;
         }
     }
 }
