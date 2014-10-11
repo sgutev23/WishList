@@ -11,9 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hackzurich.wishlist.model.UserNameId;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -68,37 +68,33 @@ public class MyFriendsFragment extends Fragment {
 
     class FriendListAdapter extends BaseAdapter {
 
-        private final List<String> ids;
+        private final List<UserNameId> users;
         private final LayoutInflater inflater;
 
-        public FriendListAdapter(final LayoutInflater inflater,List<String> ids) {
-            this.ids = ids;
+        public FriendListAdapter(final LayoutInflater inflater,List<UserNameId> ids) {
+            this.users = ids;
             this.inflater = inflater;
         }
 
         public FriendListAdapter(final LayoutInflater inflater, final WishlistBackend service, final String userId) throws ExecutionException, InterruptedException {
             this.inflater = inflater;
-            this.ids = new AsyncTask<Void, Void, List<String>>() {
+            this.users = new AsyncTask<Void, Void, List<UserNameId>>() {
 
                 @Override
-                protected List<String> doInBackground(Void... voids) {
-                    List<String> converted = new LinkedList<String>();
-                    for (String f: service.getFriendList(userId)) {
-                        converted.add(f.toString());
-                    }
-                    return converted;
+                protected List<UserNameId> doInBackground(Void... voids) {
+                    return service.getFriendList(userId);
                 }
             }.execute().get();
         }
 
         @Override
         public int getCount() {
-            return ids.size();
+            return users.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return ids.get(i);
+            return users.get(i);
         }
 
         @Override
@@ -110,12 +106,13 @@ public class MyFriendsFragment extends Fragment {
         public View getView(final int i, View view, ViewGroup viewGroup) {
             View root = this.inflater.inflate(R.layout.row, viewGroup, false);
             TextView tv = (TextView) root.findViewById(R.id.rowTextView);
-            tv.setText(ids.get(i));
+            tv.setText(users.get(i).getName());
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent toActivity = new Intent(MyFriendsFragment.this.getActivity(), FriendWishlistActivity.class);
-                    toActivity.putExtra(FriendWishlistActivity.USERID, ids.get(i));
+                    toActivity.putExtra(FriendWishlistActivity.USER_ID, users.get(i).getId());
+                    toActivity.putExtra(FriendWishlistActivity.USER_NAME, users.get(i).getName());
                     startActivity(toActivity);
                 }
             });

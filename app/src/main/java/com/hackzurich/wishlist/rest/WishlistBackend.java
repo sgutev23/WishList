@@ -1,6 +1,7 @@
 package com.hackzurich.wishlist.rest;
 
 import com.hackzurich.wishlist.model.Registration;
+import com.hackzurich.wishlist.model.UserNameId;
 import com.hackzurich.wishlist.model.Wish;
 import com.hackzurich.wishlist.model.WishAndId;
 
@@ -20,7 +21,7 @@ public interface WishlistBackend {
     void createWish(@Body WishAndId wish, Callback<String> cb);
 
     @GET("/getFriends/{id}")
-    List<String> getFriendList(@Path("id") String userId );
+    List<UserNameId> getFriendList(@Path("id") String userId );
 
     @GET("/getFriendWishlist/{id}")
     List<Wish> getWishList(@Path("id") String userId);

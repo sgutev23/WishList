@@ -1,6 +1,5 @@
 package com.hackzurich.wishlist;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,14 +19,17 @@ import retrofit.RestAdapter;
 
 
 public class FriendWishlistActivity extends CustomActivity {
-    public static String USERID = "USER_ID";
+    public final static String USER_ID = "user_id";
+    public final static String  USER_NAME = "user_name";
     private String userId = null;
+    private String userName = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        userId = intent.getStringExtra(USERID);
+        userId = intent.getStringExtra(USER_ID);
+        userName = intent.getStringExtra(USER_NAME);
 
         setContentView(R.layout.activity_friend_wishlist);
         ListView list = (ListView) findViewById(R.id.list);
