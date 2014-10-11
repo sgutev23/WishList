@@ -12,9 +12,8 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:minHeight="150dp"
+        android:height="30dp"
         android:id="@+id/add_wish"
-        android:layout_weight="1"
         android:text="ADD NEW WISH"
         android:textColor="#FFBB33"
         android:shadowColor="@color/text_shadow"
@@ -25,24 +24,21 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:minHeight="150dp"
+        android:height="50dp"
         android:id="@+id/text"
-        android:layout_weight="1"
         android:background="@drawable/textlines"/>
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:minHeight="150dp"
+        android:height="50dp"
         android:text="New Button"
-        android:id="@+id/button"
-        android:layout_weight="1" />
+        android:id="@+id/button" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:minHeight="150dp"
         android:id="@+id/my_wishlist"
-        android:layout_weight="1"
+        android:height="20dp"
         android:text="MY WISHLIST"
         android:textColor="#FFBB33"
         android:shadowColor="@color/text_shadow"
@@ -52,8 +48,8 @@
 
     <ListView
         android:id="@+id/card_listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"

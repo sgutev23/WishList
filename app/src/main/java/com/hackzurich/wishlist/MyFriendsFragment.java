@@ -79,18 +79,17 @@ public class MyFriendsFragment extends Fragment {
 
         public FriendListAdapter(final LayoutInflater inflater, final WishlistBackend service, final String userId) throws ExecutionException, InterruptedException {
             this.inflater = inflater;
-            this.ids = new ArrayList<String>();
-            /*this.ids = new AsyncTask<Void, Void, List<String>>() {
+            this.ids = new AsyncTask<Void, Void, List<String>>() {
 
                 @Override
                 protected List<String> doInBackground(Void... voids) {
                     List<String> converted = new LinkedList<String>();
-                    for (Integer f: service.getFriendList(userId)) {
+                    /*for (Integer f: service.getFriendList(userId)) {
                         converted.add(f.toString());
-                    }
+                    } */
                     return converted;
                 }
-            }.execute().get(); */
+            }.execute().get();
         }
 
         @Override

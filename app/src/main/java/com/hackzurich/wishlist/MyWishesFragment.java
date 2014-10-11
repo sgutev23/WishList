@@ -63,7 +63,7 @@ public class MyWishesFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_wishes, container, false);
         final ListView list = (ListView) rootView.findViewById(R.id.card_listView);
 
-       // refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
+        refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
 
         final Button button = (Button) rootView.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -93,9 +93,9 @@ public class MyWishesFragment extends Fragment {
                 @Override
                 protected List<Card> doInBackground(Void... voids) {
                     List<Card> result = new ArrayList<Card>();
-                    for (Wish w: service.getWishList(userId)) {
+                    /*for (Wish w: service.getWishList(userId)) {
                         result.add(new Card(w.getContent(), "test"));
-                    }
+                    } */
                     return result;
                 }
             }).execute().get();
