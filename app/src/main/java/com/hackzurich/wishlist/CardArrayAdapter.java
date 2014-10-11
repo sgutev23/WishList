@@ -56,14 +56,12 @@ public class CardArrayAdapter  extends ArrayAdapter<Card> {
             row = inflater.inflate(R.layout.list_item_card, parent, false);
             viewHolder = new CardViewHolder();
             viewHolder.line1 = (TextView) row.findViewById(R.id.line1);
-            viewHolder.line2 = (TextView) row.findViewById(R.id.line2);
             row.setTag(viewHolder);
         } else {
             viewHolder = (CardViewHolder)row.getTag();
         }
         Card card = getItem(position);
         viewHolder.line1.setText(card.getLine1());
-        viewHolder.line2.setText(card.getLine2());
         return row;
     }
 

@@ -80,6 +80,9 @@ public class MyWishesFragment extends Fragment {
 
                 final EditText text = (EditText) rootView.findViewById(R.id.text);
                 final String wishText = text.getText().toString();
+                if (wishText == null || wishText.isEmpty()) {
+                    return;
+                }
                 service.createWish(new WishAndId(new Wish(wishText), userId), new Callback<String>() {
                     @Override
                     public void success(String aVoid, Response response) {
@@ -105,7 +108,7 @@ public class MyWishesFragment extends Fragment {
                 protected List<Card> doInBackground(Void... voids) {
                     List<Card> result = new ArrayList<Card>();
                     for (Wish w: service.getWishList(userId)) {
-                        result.add(new Card(w.getContent(), "test"));
+                        result.add(new Card(w.getContent()));
                     }
                     return result;
                 }

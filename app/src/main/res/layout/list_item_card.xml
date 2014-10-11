@@ -3,17 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
     android:descendantFocusability="beforeDescendants">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:paddingRight="15dp"
         android:background="@drawable/card_bgr"
         android:descendantFocusability="afterDescendants">
@@ -22,14 +20,10 @@
             android:id="@+id/line1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Text line 2"
-            android:textColor="#E0EEEE"/>
-
-        <TextView
-            android:id="@+id/line2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Text line 2"/>
+            android:text="Text line 1"
+            android:textSize="16sp"
+            android:fontFamily="serif"
+            android:textColor="@color/dark_gray"/>
 
     </LinearLayout>
 </FrameLayout>

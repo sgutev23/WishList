@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
@@ -42,6 +43,12 @@ public class TabbedActivity extends FragmentActivity implements
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                actionBar.setSelectedNavigationItem(position);
+            }
+        });
 
         // Adding Tabs
         for (String tab_name : tabs) {
@@ -89,4 +96,9 @@ public class TabbedActivity extends FragmentActivity implements
             return 2;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
+}
