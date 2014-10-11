@@ -1,8 +1,8 @@
 package com.hackzurich.wishlist;
-
-import android.app.Fragment;
+;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +63,7 @@ public class MyWishesFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_wishes, container, false);
         final ListView list = (ListView) rootView.findViewById(R.id.card_listView);
 
-        refreshAdapter(list, service);
+       // refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
 
         final Button button = (Button) rootView.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {

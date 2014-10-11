@@ -46,7 +46,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
 
-public class MainActivity extends CustomActivity implements ActionBar.TabListener {
+public class MainActivity3 extends CustomActivity implements ActionBar.TabListener {
     public static int FACEBOOK_AUTH = 1;
     public String userId;
     public final Object lock = new Object();
@@ -68,7 +68,7 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
             public void onCompleted(GraphUser user, Response response) {
                 if (user != null) {
                     String userId = user.getId();
-                    MainActivity.this.userId = userId;
+                    MainActivity3.this.userId = userId;
                     String token = session.getAccessToken();
 
                     final RestAdapter restAdapter = new RestAdapter.Builder()
@@ -122,17 +122,17 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (Session.getActiveSession() == null) {
+       /* if (Session.getActiveSession() == null) {
             Intent login = new Intent(this, LoginActivity.class);
             startActivityForResult(login, FACEBOOK_AUTH);
         } else {
             doLogin();
-        }
+        } */
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        doLogin();
+        //doLogin();
     }
 
     void doLogin() {
@@ -156,10 +156,10 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Session session = Session.getActiveSession();
+        /*Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
             session.closeAndClearTokenInformation();
-        }
+        } */
     }
 
     void getHashForFB () {
@@ -189,13 +189,6 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -231,11 +224,12 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return MyWishesFragment.newInstance(1, userId);
+                    //return MyWishesFragment.newInstance(1, userId);
                 case 1:
                 default:
-                    return MyFriendsFragment.newInstance(1, userId);
+                   // return MyFriendsFragment.newInstance(1, userId);
             }
+            return null;
         }
 
 
@@ -255,60 +249,6 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
                     return getString(R.string.title_section2).toUpperCase(l);
             }
             return null;
-        }
-    }
-
-    public static class CardArrayAdapter  extends ArrayAdapter<Card> {
-        private static final String TAG = "CardArrayAdapter";
-        private List<Card> cardList = new ArrayList<Card>();
-
-        static class CardViewHolder {
-            TextView line1;
-            TextView line2;
-        }
-
-        public CardArrayAdapter(Context context, int textViewResourceId) {
-            super(context, textViewResourceId);
-        }
-
-        @Override
-        public void add(Card object) {
-            cardList.add(object);
-            super.add(object);
-        }
-
-        @Override
-        public int getCount() {
-            return this.cardList.size();
-        }
-
-        @Override
-        public Card getItem(int index) {
-            return this.cardList.get(index);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View row = convertView;
-            CardViewHolder viewHolder;
-            if (row == null) {
-                LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.list_item_card, parent, false);
-                viewHolder = new CardViewHolder();
-                viewHolder.line1 = (TextView) row.findViewById(R.id.line1);
-                viewHolder.line2 = (TextView) row.findViewById(R.id.line2);
-                row.setTag(viewHolder);
-            } else {
-                viewHolder = (CardViewHolder)row.getTag();
-            }
-            Card card = getItem(position);
-            viewHolder.line1.setText(card.getLine1());
-            viewHolder.line2.setText(card.getLine2());
-            return row;
-        }
-
-        public Bitmap decodeToBitmap(byte[] decodedByte) {
-            return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
         }
     }
 }

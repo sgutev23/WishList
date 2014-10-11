@@ -25,15 +25,15 @@ public class LoginActivity extends CustomActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-        LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
-        authButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
+        /*LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
+        authButton.setReadPermissions(Arrays.asList("public_profile", "user_friends")); */
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-        setResult(resultCode, data);
-        finish();
+       // Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+       // setResult(resultCode, data);
+      //  finish();
     }
 
 

@@ -1,9 +1,9 @@
 package com.hackzurich.wishlist;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -22,7 +23,7 @@ import retrofit.RestAdapter;
 /**
  * Created by cotizo on 10/11/2014.
  */
-public class MyFriendsFragment extends Fragment{
+public class MyFriendsFragment extends Fragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -78,7 +79,8 @@ public class MyFriendsFragment extends Fragment{
 
         public FriendListAdapter(final LayoutInflater inflater, final WishlistBackend service, final String userId) throws ExecutionException, InterruptedException {
             this.inflater = inflater;
-            this.ids = new AsyncTask<Void, Void, List<String>>() {
+            this.ids = new ArrayList<String>();
+            /*this.ids = new AsyncTask<Void, Void, List<String>>() {
 
                 @Override
                 protected List<String> doInBackground(Void... voids) {
@@ -88,7 +90,7 @@ public class MyFriendsFragment extends Fragment{
                     }
                     return converted;
                 }
-            }.execute().get();
+            }.execute().get(); */
         }
 
         @Override
