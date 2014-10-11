@@ -48,40 +48,59 @@ import retrofit.RetrofitError;
 
 public class MainActivity extends CustomActivity implements ActionBar.TabListener {
     public static int FACEBOOK_AUTH = 1;
+    public String userId;
+    public final Object lock = new Object();
+
     private Session.StatusCallback statusCallback =
             new SessionStatusCallback();
     private class SessionStatusCallback implements Session.StatusCallback {
         @Override
         public void call(final Session session, SessionState state, Exception exception) {
             if (state == SessionState.OPENED || state == SessionState.OPENED_TOKEN_UPDATED) {
-                Request req = Request.newMeRequest(session, new Request.GraphUserCallback() {
-                    @Override
-                    public void onCompleted(GraphUser user, Response response) {
-                        if (user != null) {
-                            String userId = user.getId();
-                            String token = session.getAccessToken();
-
-                            final RestAdapter restAdapter = new RestAdapter.Builder()
-                                    .setEndpoint("http://cotizo.net:3000/")
-                                    .build();
-                            final WishlistBackend service = restAdapter.create(WishlistBackend.class);
-                            service.register(new Registration(userId, token), new Callback<Void>() {
-                                @Override
-                                public void success(Void aVoid, retrofit.client.Response response) {
-
-                                }
-
-                                @Override
-                                public void failure(RetrofitError error) {
-
-                                }
-                            });
-                        }
-                    }
-                });
-                req.executeAsync();
+                getUserId(session);
             }
         }
+    }
+
+    private void getUserId(final Session session) {
+        Request req = Request.newMeRequest(session, new Request.GraphUserCallback() {
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    String userId = user.getId();
+                    MainActivity.this.userId = userId;
+                    String token = session.getAccessToken();
+
+                    final RestAdapter restAdapter = new RestAdapter.Builder()
+                            .setEndpoint(getString(R.string.endpoint))
+                            .build();
+                    final WishlistBackend service = restAdapter.create(WishlistBackend.class);
+                    service.register(new Registration(userId, token), new Callback<Void>() {
+                        @Override
+                        public void success(Void aVoid, retrofit.client.Response response) {
+                            resumeSetup();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            resumeSetup(); // die
+                        }
+                    });
+                }
+            }
+        });
+        req.executeAsync();
+    }
+
+    private void resumeSetup() {
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
     }
 
     /**
@@ -103,18 +122,7 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
-        Session session = Session.getActiveSession();
-        if (session == null) {
+        if (Session.getActiveSession() == null) {
             Intent login = new Intent(this, LoginActivity.class);
             startActivityForResult(login, FACEBOOK_AUTH);
         } else {
@@ -129,12 +137,18 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
 
     void doLogin() {
         Session session = Session.getActiveSession();
-        if (!session.isOpened() && !session.isClosed()) {
+        if (session.isClosed()) {
             session.openForRead(new Session.OpenRequest(this)
                     .setPermissions(Arrays.asList("public_profile", "user_friends"))
                     .setCallback(statusCallback));
+        } else if (session.isOpened()) {
+            if (session.getAccessToken().isEmpty()) {
+                Session.openActiveSession(this, false, statusCallback);
+            } else {
+                getUserId(session);
+            }
         } else {
-            Session.openActiveSession(this, true, statusCallback);
+            throw new Error("WTF");
         }
     }
 
@@ -143,7 +157,9 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
     protected void onDestroy() {
         super.onDestroy();
         Session session = Session.getActiveSession();
-        if (session != null && session.isOpened()) session.close();
+        if (session != null && session.isOpened()) {
+            session.closeAndClearTokenInformation();
+        }
     }
 
     void getHashForFB () {
@@ -215,10 +231,10 @@ public class MainActivity extends CustomActivity implements ActionBar.TabListene
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return new MyWishesFragment();
+                    return MyWishesFragment.newInstance(1, userId);
                 case 1:
                 default:
-                    return new MyFriendsFragment();
+                    return MyFriendsFragment.newInstance(1, userId);
             }
         }
 

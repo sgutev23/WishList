@@ -21,19 +21,19 @@ import retrofit.RestAdapter;
 
 public class FriendWishlistActivity extends CustomActivity {
     public static String USERID = "USER_ID";
-    private Integer userId = null;
+    private String userId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        userId = Integer.parseInt(intent.getStringExtra(USERID));
+        userId = intent.getStringExtra(USERID);
 
         setContentView(R.layout.activity_friend_wishlist);
         ListView list = (ListView) findViewById(R.id.list);
 
         final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://cotizo.net:3000/")
+                .setEndpoint(getString(R.string.endpoint))
                 .build();
         final WishlistBackend service = restAdapter.create(WishlistBackend.class);
 
