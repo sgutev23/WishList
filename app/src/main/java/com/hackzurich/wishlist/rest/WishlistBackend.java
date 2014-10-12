@@ -35,4 +35,7 @@ public interface WishlistBackend {
 
     @POST("/register")
     void register(@Body Registration registration, Callback<String> cb);
+
+    @POST("/deleteWish/{userId}/{wishId}")
+    void deleteWish(@Path("userId") String userId, @Path("wishId") String wishId, Callback<String> cb);
 }
