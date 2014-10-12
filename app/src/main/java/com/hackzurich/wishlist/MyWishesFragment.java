@@ -1,5 +1,4 @@
 package com.hackzurich.wishlist;
-;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,17 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.hackzurich.wishlist.model.Card;
 import com.hackzurich.wishlist.model.Wish;
 import com.hackzurich.wishlist.model.WishAndId;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -26,6 +22,8 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+;
 
 /**
  * Created by cotizo on 10/11/2014.
@@ -102,19 +100,15 @@ public class MyWishesFragment extends Fragment {
 
     private void refreshAdapter(ListView list, final WishlistBackend service, final String userId) {
         try {
-            List<Card> wishes = (new AsyncTask<Void, Void, List<Card>>() {
+            List<Wish> wishes = (new AsyncTask<Void, Void, List<Wish>>() {
 
                 @Override
-                protected List<Card> doInBackground(Void... voids) {
-                    List<Card> result = new ArrayList<Card>();
-                    for (Wish w: service.getWishList(userId)) {
-                        result.add(new Card(w.getContent()));
-                    }
-                    return result;
+                protected List<Wish> doInBackground(Void... voids) {
+                    return service.getWishList(userId);
                 }
             }).execute().get();
 
-            ArrayAdapter<Card> listAdapter = new CardArrayAdapter(getActivity(), R.layout.list_item_card, wishes);
+            CardArrayAdapter listAdapter = new CardArrayAdapter(getActivity(), R.layout.list_item_card, wishes, userId);
             list.setAdapter(listAdapter);
             listAdapter.notifyDataSetChanged();
         } catch (InterruptedException e) {
