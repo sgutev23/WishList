@@ -10,4 +10,5 @@
         android:text="Tab"
         android:id="@+id/tabTitle"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>
