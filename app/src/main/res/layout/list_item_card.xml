@@ -12,13 +12,13 @@
         android:paddingLeft="20dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:paddingRight="15dp"
+        android:paddingRight="20dp"
         android:background="@drawable/card_bgr"
         android:descendantFocusability="afterDescendants">
 
         <TextView
             android:id="@+id/line1"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Text line 1"
             android:layout_gravity="left"
@@ -29,14 +29,14 @@
             android:gravity="fill_horizontal" />
         <TextView
             android:id="@+id/line2"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:fontFamily="serif"
             android:layout_weight="1"
             android:text=""
             android:textColor="@color/dark_gray"
-            android:layout_gravity="right"
+            android:gravity="right"
             android:textStyle="italic" />
     </LinearLayout>
 </FrameLayout>

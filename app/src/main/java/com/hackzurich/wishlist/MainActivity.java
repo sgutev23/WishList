@@ -49,6 +49,7 @@ public class MainActivity extends CustomActivity {
                          Exception exception) {
             if (state.isOpened()) {
                 load(spinner);
+                loginBtn.setEnabled(false);
                 getUserId(session);
                 Log.d("FacebookSampleActivity", "Facebook session opened");
             } else if (state.isClosed()) {
@@ -101,8 +102,8 @@ public class MainActivity extends CustomActivity {
         setContentView(R.layout.activity_login_screen);
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
         spinner.setVisibility(View.GONE);
-        LoginButton uiButton = (LoginButton) findViewById(R.id.authButton);
-        uiButton.setPublishPermissions(PERMISSIONS);
+        loginBtn = (LoginButton) findViewById(R.id.authButton);
+        loginBtn.setPublishPermissions(PERMISSIONS);
     }
 
     @Override

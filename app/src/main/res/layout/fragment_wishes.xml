@@ -24,7 +24,7 @@
             android:paddingRight="10dp"
             android:height="50dp"
             android:id="@+id/text"
-            android:hint="Add new wish..."
+            android:hint="Add a new wish..."
             android:textColorHint="@color/com_facebook_picker_search_bar_text"
             android:textColor="@color/grey_font"
             android:background="@drawable/input_bgr"/>
@@ -59,5 +59,18 @@
         android:divider="@null"
         android:dividerHeight="10dp"
         android:layout_weight="1"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingTop="55dp"
+        android:textSize="26sp"
+        android:fontFamily="serif"
+        android:textColor="@color/grey_font"
+        android:text="No items"
+        android:visibility="gone"
+        android:id="@+id/emptyListOfWishes">
+    </TextView>
 
 </LinearLayout>

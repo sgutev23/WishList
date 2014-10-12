@@ -64,6 +64,7 @@ public class MyWishesFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_wishes, container, false);
         final ListView list = (ListView) rootView.findViewById(R.id.card_listView);
+        list.setEmptyView(rootView.findViewById(R.id.emptyListOfWishes));
 
        // refreshAdapter(list, service, getArguments().getString(ARG_USER_ID));
         final String userId = getArguments().getString(ARG_USER_ID);

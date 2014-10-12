@@ -24,4 +24,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/list"
         android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingTop="55dp"
+        android:textSize="26sp"
+        android:fontFamily="serif"
+        android:textColor="@color/grey_font"
+        android:text="No items"
+        android:visibility="gone"
+        android:id="@+id/emptyListOfFriends">
+    </TextView>
 </LinearLayout>

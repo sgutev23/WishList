@@ -64,6 +64,7 @@ public class MyFriendsFragment extends Fragment {
         final WishlistBackend service = restAdapter.create(WishlistBackend.class);
         final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
         final ListView list = (ListView) rootView.findViewById(R.id.list);
+        list.setEmptyView(rootView.findViewById(R.id.emptyListOfFriends));
         try {
             list.setAdapter(new FriendListAdapter(inflater, service, userId));
         } catch (InterruptedException e) {

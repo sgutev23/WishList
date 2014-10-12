@@ -50,6 +50,7 @@ public class FriendWishlistActivity extends CustomActivity {
 
         setContentView(R.layout.activity_friend_wishlist);
         ListView list = (ListView) findViewById(R.id.list);
+        list.setEmptyView(findViewById(R.id.emptyListFriendsWishes));
 
         final RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(getString(R.string.endpoint))
@@ -130,7 +131,7 @@ public class FriendWishlistActivity extends CustomActivity {
                                     service.changeWishState(myId, userId, wishId, new Callback<String>() {
                                         @Override
                                         public void success(String s, Response response) {
-                                            line2.setText(String.format("- %s", nameMap.getString(myId)));
+                                            line2.setText(String.format("%s", nameMap.getString(myId)));
                                         }
 
                                         @Override

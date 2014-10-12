@@ -8,14 +8,14 @@ public class UserInfo {
     private final String name;
     private final String picture;
     private final String birthday;
-    private final String numOfWishes;
+    private final String numberOfWishes;
 
-    public UserInfo(String id, String name, String birthday, String numOfWishes, String picture) {
+    public UserInfo(String id, String name, String birthday, String numberOfWishes, String picture) {
         this.id = id;
         this.name = name;
         this.picture = picture;
         this.birthday = birthday;
-        this.numOfWishes = numOfWishes;
+        this.numberOfWishes = numberOfWishes;
     }
 
     public String getId() {
@@ -35,6 +35,6 @@ public class UserInfo {
     }
 
     public String getNumOfItems() {
-        return numOfWishes;
+        return numberOfWishes;
     }
 }
