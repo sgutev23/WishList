@@ -123,7 +123,7 @@ public class FriendWishlistActivity extends CustomActivity {
                 public void onClick(View view) {
                     new AlertDialog.Builder(FriendWishlistActivity.this)
                             .setTitle("Confirmation")
-                            .setMessage("Are you sure you want to buy this item?")
+                            .setMessage("Are you sure you want to reserve this item?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {

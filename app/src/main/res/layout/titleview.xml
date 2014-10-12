@@ -9,15 +9,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:textSize="17dp"
+        android:layout_marginLeft="7dp"
+        android:textSize="22sp"
         android:textColor="#FFFFFF"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text=""
-        android:fontFamily="sans-serif"
-        android:shadowColor="@color/text_shadow"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="2"/>
+        android:text=""/>
 </RelativeLayout>

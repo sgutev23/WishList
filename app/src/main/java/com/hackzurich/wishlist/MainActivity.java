@@ -49,7 +49,6 @@ public class MainActivity extends CustomActivity {
                          Exception exception) {
             if (state.isOpened()) {
                 load(spinner);
-                loginBtn.setEnabled(false);
                 getUserId(session);
                 Log.d("FacebookSampleActivity", "Facebook session opened");
             } else if (state.isClosed()) {
