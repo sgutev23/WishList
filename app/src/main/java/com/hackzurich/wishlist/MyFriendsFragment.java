@@ -3,7 +3,6 @@ package com.hackzurich.wishlist;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,13 +15,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hackzurich.wishlist.model.UserNameIdPic;
+import com.hackzurich.wishlist.model.UserInfo;
 import com.hackzurich.wishlist.rest.WishlistBackend;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -80,20 +76,15 @@ public class MyFriendsFragment extends Fragment {
 
     class FriendListAdapter extends BaseAdapter {
 
-        private final List<UserNameIdPic> users;
+        private final List<UserInfo> users;
         private final LayoutInflater inflater;
-
-        public FriendListAdapter(final LayoutInflater inflater,List<UserNameIdPic> ids) {
-            this.users = ids;
-            this.inflater = inflater;
-        }
 
         public FriendListAdapter(final LayoutInflater inflater, final WishlistBackend service, final String userId) throws ExecutionException, InterruptedException {
             this.inflater = inflater;
-            this.users = new AsyncTask<Void, Void, List<UserNameIdPic>>() {
+            this.users = new AsyncTask<Void, Void, List<UserInfo>>() {
 
                 @Override
-                protected List<UserNameIdPic> doInBackground(Void... voids) {
+                protected List<UserInfo> doInBackground(Void... voids) {
                     return service.getFriendList(userId);
                 }
             }.execute().get();
@@ -116,14 +107,31 @@ public class MyFriendsFragment extends Fragment {
 
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
-            View root = this.inflater.inflate(R.layout.row, viewGroup, false);
+            View root = this.inflater.inflate(R.layout.friend_row, viewGroup, false);
             TextView tv = (TextView) root.findViewById(R.id.rowTextView);
-            if (users.get(i).getPicture() != null) {
-                new DownloadImageTask((ImageView) root.findViewById(R.id.friendImage))
-                        .execute(users.get(i).getPicture());
-            }
             tv.setText(users.get(i).getName());
-            tv.setOnClickListener(new View.OnClickListener() {
+            if (users.get(i).getPictureUrl() != null) {
+                new DownloadImageTask((ImageView) root.findViewById(R.id.friendImage))
+                        .execute(users.get(i).getPictureUrl());
+            }
+
+            if (users.get(i).getBirthday() != null) {
+                TextView birthdayView = (TextView) root.findViewById(R.id.birthday);
+                birthdayView.setText("BIRTHDAY " + users.get(i).getBirthday());
+            }
+
+            if (users.get(i).getNumOfItems() != null) {
+                int numOfWishes = Integer.parseInt(users.get(i).getNumOfItems());
+                TextView numWishesView = (TextView) root.findViewById(R.id.numItems);
+
+                if (numOfWishes == 0) {
+                    numWishesView.setText("NO WISHES");
+                } else if (numOfWishes > 0) {
+                    numWishesView.setText(numOfWishes + " WISHES");
+                }
+            }
+
+            root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent toActivity = new Intent(MyFriendsFragment.this.getActivity(), FriendWishlistActivity.class);
@@ -169,7 +177,7 @@ public class MyFriendsFragment extends Fragment {
 
         Bundle getNameMap() {
             Bundle result = new Bundle();
-            for (UserNameIdPic uni: this.users) {
+            for (UserInfo uni: this.users) {
                 result.putString(uni.getId(), uni.getName());
             }
             result.putString(userId, "me");

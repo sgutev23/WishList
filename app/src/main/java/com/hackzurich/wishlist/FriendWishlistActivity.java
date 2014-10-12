@@ -112,7 +112,7 @@ public class FriendWishlistActivity extends CustomActivity {
             String bought = wishes.get(i).getBought();
             if (! (bought == null || bought.isEmpty())) {
                 line1.setPaintFlags(line1.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                line2.setText(String.format(" - %s", nameMap.getString(bought)));
+                line2.setText(String.format("%s", nameMap.getString(bought)));
             } else {
                 line2.setText("");
             }

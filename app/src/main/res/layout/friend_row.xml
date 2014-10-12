@@ -10,8 +10,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-
+        android:paddingLeft="10dp"
         android:paddingBottom="10dp"
         android:paddingRight="23dp"
         android:background="@drawable/card_bgr"
@@ -20,10 +19,12 @@
         <ImageView
             android:id="@+id/friendImage"
             android:minWidth="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_marginTop="7dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
 
         <TextView
+            android:paddingLeft="8dp"
             android:id="@+id/rowTextView"
             android:paddingTop="16dp"
             android:layout_weight="1"

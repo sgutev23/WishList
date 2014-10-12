@@ -1,4 +1,4 @@
-package com.hackzurich.wishlist.model.Card;
+package com.hackzurich.wishlist.model;
 
 /**
  * Created by heat on 10/11/14.

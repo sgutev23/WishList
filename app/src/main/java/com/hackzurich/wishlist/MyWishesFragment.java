@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.hackzurich.wishlist.model.Card.Card;
+import com.hackzurich.wishlist.model.Card;
 import com.hackzurich.wishlist.model.Wish;
 import com.hackzurich.wishlist.model.WishAndId;
 import com.hackzurich.wishlist.rest.WishlistBackend;

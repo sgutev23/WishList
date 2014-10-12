@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.hackzurich.wishlist.model.Card.Card;
+import com.hackzurich.wishlist.model.Card;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -21,8 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text line 1"
+            android:layout_gravity="left"
             android:textSize="16sp"
             android:fontFamily="serif"
+            android:layout_weight="1"
             android:textColor="@color/dark_gray"
             android:gravity="fill_horizontal" />
         <TextView
@@ -31,7 +33,10 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:fontFamily="serif"
+            android:layout_weight="1"
+            android:text=""
             android:textColor="@color/dark_gray"
+            android:layout_gravity="right"
             android:textStyle="italic" />
     </LinearLayout>
 </FrameLayout>
