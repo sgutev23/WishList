@@ -49,6 +49,9 @@ public class FriendWishlistActivity extends CustomActivity {
         nameMap = intent.getBundleExtra(NAME_MAP);
 
         setContentView(R.layout.activity_friend_wishlist);
+        TextView titleView = ((TextView)findViewById(R.id.title));
+        titleView.setText(userName.substring(0, userName.indexOf(' ')) + "'s list");
+
         ListView list = (ListView) findViewById(R.id.list);
         list.setEmptyView(findViewById(R.id.emptyListFriendsWishes));
 

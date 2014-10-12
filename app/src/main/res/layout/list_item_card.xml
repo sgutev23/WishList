@@ -9,18 +9,27 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:paddingLeft="6dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
         android:paddingRight="20dp"
         android:background="@drawable/card_bgr"
         android:descendantFocusability="afterDescendants">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="left"
+            android:src="@drawable/present_tiny"/>
 
         <TextView
             android:id="@+id/line1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Text line 1"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="0dp"
             android:layout_gravity="left"
             android:textSize="16sp"
             android:fontFamily="serif"

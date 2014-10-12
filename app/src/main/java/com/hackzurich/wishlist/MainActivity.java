@@ -102,7 +102,7 @@ public class MainActivity extends CustomActivity {
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
         spinner.setVisibility(View.GONE);
         loginBtn = (LoginButton) findViewById(R.id.authButton);
-        loginBtn.setPublishPermissions(PERMISSIONS);
+        loginBtn.setReadPermissions(PERMISSIONS);
     }
 
     @Override
